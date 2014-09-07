@@ -1,0 +1,11 @@
+[0901/225453:INFO:(0)] WebCore is now online.
+[0901/225453:INFO:(0)] Running Awesomium 1.7.4.2
+[0901/225642:INFO:(0)] WebCore is now online.
+[0901/225642:INFO:(0)] Running Awesomium 1.7.4.2
+[0901/225737:ERROR:ipc_channel_win.cc(360)] pipe error: 232
+[0901/225909:INFO:(0)] WebCore is now online.
+[0901/225909:INFO:(0)] Running Awesomium 1.7.4.2
+[0903/171734:INFO:(0)] WebCore is now online.
+[0903/171734:INFO:(0)] Running Awesomium 1.7.4.2
+[0903/171737:WARNING:(0)] The specified name (external), is reserved. It either represents an HTML DOM object, or an object variable already available in the page. Use ExecuteJavascriptWithResult after DocumentReady, to obtain this object.
+Parameternamn: name
