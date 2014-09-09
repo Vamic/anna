@@ -1,0 +1,2 @@
+C:\Users\carlkonig\Dropbox\bgo bot\FloatingChair\FloatingChair\obj\x86\Debug\FloatingChair.exe
+C:\Users\carlkonig\Dropbox\bgo bot\FloatingChair\FloatingChair\obj\x86\Debug\FloatingChair.pdb
