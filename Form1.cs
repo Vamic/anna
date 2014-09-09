@@ -16,6 +16,7 @@ using OpenQA.Selenium.Support.UI;
 using System.Timers;
 using System.Threading;
 using OpenQA.Selenium.Remote;
+using System.Text.RegularExpressions;
 namespace FloatingChair
 {
     public partial class Form1 : Form
@@ -23,6 +24,12 @@ namespace FloatingChair
         System.Timers.Timer aTimer;
         IWebDriver driver;
         Random rng = new Random();
+        /* lists all the ids of the items that you can use at any time like food items
+         * someone please come up with a better idea or figure out how to get the categories
+         * from the tooltips, this is ridiculous*/
+        List<string> Clickables = new List<string> {
+        "29","102","157","212","254", "354"
+        };
         bool ready;
         int gameState = 0;
         /* 0 = Game lobby, not started
@@ -58,6 +65,7 @@ namespace FloatingChair
         {
             ready = true;
             aTimer.Start();
+            SetTextBox("Started.");
         }
 
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
@@ -105,9 +113,12 @@ namespace FloatingChair
                 /*
                  TODO: Put in options for using items and skills in inventory.
                  */
-                if (textBox1.Text != "Waiting for opponent...")
+                IList<IWebElement> Items = driver.FindElements(By.ClassName("itemIcon"));
+                foreach (IWebElement i in Items)
                 {
-                    SetTextBox("Waiting for opponent...");
+                    string id = i.GetAttribute("id");
+                    id = Regex.Match(id, @"\d+").Value;
+                    SetTextBox("item id:"+id);
                 }
                 ready = true;
                 return;
@@ -128,10 +139,9 @@ namespace FloatingChair
                 #region Clicking actions
                 if (continueButton.Count == 0){}
                 #region Click button 1
+                    //linear search can take forever should prolly fix it someday
                 else if (continueButton[0].Text == "Continue" ||
-                    continueButton[0].Text == "Roll Dice" ||
-                    continueButton[0].Text == "Roll streak x2" ||
-                    continueButton[0].Text == "Roll streak x3" ||
+                    continueButton[0].Text.StartsWith("Roll ") ||
                     continueButton[0].Text == "Proceed..." ||
                     continueButton[0].Text == "Let's go" ||
                     continueButton[0].Text == "Yes" ||
@@ -171,7 +181,7 @@ namespace FloatingChair
                 }
                 #endregion
                 #region Click any button
-                else if (continueButton[0].FindElements(By.XPath("*")).Count > 0 ||//For when items are given out
+                else if (continueButton[0].FindElements(By.XPath("*")).Count > 0 ||//Item buttons contain shit so i look for anything at all
                          continueButton[0].Text == "Ask the bartender for a drink." ||
                          continueButton[0].Text == "The Church." ||
                          eventTitle[0].Text == "Crossroads" ||
@@ -243,7 +253,10 @@ namespace FloatingChair
             {
                 if (textBox1.Text != "Game over, naviate to a new game and press 'Start'.")
                 {
+                    IWebElement chatBox = driver.FindElement(By.Id("chatbox_textInput"));
                     aTimer.Stop();
+                    chatBox.SendKeys("gg");
+                    chatBox.Submit();
                     SetTextBox("Game over, naviate to a new game and press 'Start'.");
                 }
                 ready = true;
@@ -260,6 +273,7 @@ namespace FloatingChair
         private void stopButton_Click(object sender, EventArgs e)
         {
             aTimer.Stop();
+            SetTextBox("Stopped.");
         }
 #region Stolen dragging code from SO
         private bool _Moving = false;
